@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Arrow Functions</title>
+</head>
+<body>
+	<script>
+		/*
+		 * Benefits of arrow functions:
+		 *
+		 * 1) More concise syntax
+		 * 2) Implicit return
+		 * 3) Doesn't rebind this when you use an arrow function inside of another
+		 *	  arrow function. Which is useful for click handlers.
+		 *
+		 * Note that arrow functions are always anonymous
+		 */
+
+		const names = ['richard', 'sunnie', 'hannah'];
+
+		// The non-arrow function way
+		 const fullNames = names.map(function(name) {
+			return `${name} memory`;
+		 });
+
+		console.log(fullNames);
+
+		// First iteration using arrow func
+		const fullNames2 = names.map((name) => {
+			return `${name} memory`;
+		 });
+
+		console.log(fullNames2);
+
+		// Second iteration using arrow func (only single arg, so parenthesis no required, 
+		// note that no args does require empty parenthsis)
+		const fullNames3 = names.map(name => {
+			return `${name} memory`;
+		 });
+
+		console.log(fullNames3);
+
+		// Third iteration using arrow func (Implicit return, curly brackets deleted)
+		const fullNames4 = names.map(name => `${name} memory`);
+
+		console.log(fullNames4);
+
+		// Here is an example of assigning an arrow function to a variable. This is 
+		// anonymous and thus won't provide great stack traces. Named functions are
+		// required to show up in a stack trace.
+		const sayMyName = (name) => { alert(`Hello ${name}`) }
+		sayMyName('Richard');
+
+		// Here is an example where the implicit return will return an object, hence
+		// parenthsis are required
+		const race = '100m Dash';
+		const winners = ['Hunter Gath', 'Imda Boss'];
+		const winObject = winners.map((winner, i) => ({name: winner, race: race, place: i + 1}));
+		console.table(winObject);
+
+		// example using filter
+		const ages = [23,62,45,234,2,62,234,62,34];
+		const old = ages.filter(age => (age >= 60));
+		console.log(old);
+
+	</script>
+</body>
+</html>
