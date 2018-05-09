@@ -7,6 +7,71 @@
 	<title>Arrow Functions</title>
 </head>
 <body>
+	<style>
+		.wrap {
+			min-height: 100vh;
+			display:flex;
+			justify-content: center;
+			align-items: center;
+	
+			font-family: sans-serif;
+			font-weight: 100;
+			color:white;
+		}
+	
+		.box {
+			background:black url(https://unsplash.it/1500/1500?image=560&blur=0.5) center fixed no-repeat;
+			width:50px;
+			height:50px;
+			padding:50px;
+			transition: width 0.2s, height 0.6s;
+			position: relative;
+		}
+	
+		.box.opening {
+			width:500px;
+			height:500px;
+		}
+	
+		.box h2 {
+			position: absolute;
+			width:100%;
+			font-size: 100px;
+			transform:translateX(-200%);
+			transition: all 0.5s;
+			top:0;
+		}
+	
+		.box p {
+			position: absolute;
+			width:100%;
+			transform:translateX(200%);
+			transition: all 0.5s;
+			bottom:0;
+		}
+	
+		.box.open > * {
+			transform:translateX(0%);
+		}
+
+		button {
+			font-size: 100px;
+		}
+		.on {
+			background: #ffc600
+		}
+	</style>
+
+	<div class="wrap">
+		<div class="box">
+			<h2>Richard</h2>
+			<p class="social">@richard</p>
+		</div>
+	</div>
+
+
+	<button id="pushy">Push me</button>
+
 	<script>
 		/*
 		 * Benefits of arrow functions:
@@ -15,6 +80,8 @@
 		 * 2) Implicit return
 		 * 3) Doesn't rebind this when you use an arrow function inside of another
 		 *	  arrow function. Which is useful for click handlers.
+		 * 4) Arrow functions also don't define the keyword arguments to get 
+		 *    the list of input args.
 		 *
 		 * Note that arrow functions are always anonymous
 		 */
@@ -66,6 +133,98 @@
 		const old = ages.filter(age => (age >= 60));
 		console.log(old);
 
-	</script>
+		/*
+		 * this does not get rebound!!!!
+		 * 
+		 * Don't use arrow functions for top level 
+		 * event listeners.
+		 */
+		const box = document.querySelector('.box');
+		box.addEventListener('click', function() {
+			let first = 'opening';
+			let second = 'open';
+
+			// this here will be the box html element
+
+			// if the classlist already contains opening
+			// then we reverse the values of first and second.
+			if (this.classList.contains(first)) {
+				[first, second] = [second, first];
+			}
+
+			this.classList.toggle(first);
+
+			// Note that the function declared in setTimeout
+			// also doesn't have a bound "this" either, but
+			// if we make it an arrow function it does
+			// setTimeout(function() {
+			// 	this.classList.toggle('open');
+			// }, 200);
+
+			// In this case, this is inherited from the
+			// parent.
+			setTimeout(() => {
+			 	this.classList.toggle(second);
+			}, 200);
+
+		});
+
+		// box.addEventListener('click', () => {
+		// 	// this here is just the parent scope, 
+		// 	// because we are in the global scope 
+		// 	// here
+		// })
+
+		/*
+		 * Other examples of when not to use arrow functions
+		 */
+
+		// Don't use an arrow func here
+		button.addEventListener('click', function() {
+			this.classList.toggle('on');
+		});
+
+		const person = {
+			points: 23,
+			badscore: () => {
+				// Won't work because this iss't defined
+				this.points++;
+			},
+			goodscore: function() {
+				this.points++;
+			},
+			betterscore() {
+				this.points++;
+			}
+		}
+
+		class Car {
+			constructor(make, color) {
+				this.make = make;
+				this.color = color;
+			}
+		}
+
+		const beemer = new Car('bmw', 'blue');
+		const subie = new Car('Subaru', 'white');
+
+		// Don't use an arrow function here, otherwise this wont
+		// be defined.
+		Car.prototype.summarize = function() {
+			return 'This car is a ${this.make} in the color ${this.color}'
+		}
+
+		// an example of needing a regular function instead of an arrow
+		// function because arguments is not defined when using an arrow
+		// function.
+		const orderChildren = function() {
+			const children = Array.from(arguments);
+			return children.map((child, i) => {
+				return `${child} was child #${i + 1}`;
+			});
+			console.log(arguments);
+		}
+
+	</script> 
 </body>
 </html>
