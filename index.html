@@ -225,6 +225,23 @@
 			console.log(arguments);
 		}
 
+		/* 
+		 * An example showing default args
+		 */
+		 function calculateBill(total, tax = 0.13, tip = 0.15) {
+			 // replaces this:
+			 // tax = tax || 0.13;
+			 // tip = tip || 0.15;
+
+			 return total + (total * tax) + (total * tip);
+		 }
+
+		 const totalBill = calculateBill(100);
+		 console.log(totalBill);
+
+		 const anotherTotalBill = calculateBill(100, undefined, 0.25);
+		 console.log(anotherTotalBill);
+
 	</script> 
 </body>
 </html>
